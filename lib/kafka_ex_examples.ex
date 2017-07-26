@@ -3,16 +3,21 @@ defmodule KafkaExExamples do
   Documentation for KafkaExExamples.
   """
 
-  @doc """
-  Hello world.
+  use Application
 
-  ## Examples
+  alias KafkaExExamples.Consumer
 
-      iex> KafkaExExamples.hello
-      :world
+  def start(_type, _args) do
+    import Supervisor.Spec
 
-  """
-  def hello do
-    :world
+    children = [
+      supervisor(
+        KafkaEx.ConsumerGroup.Supervisor,
+        [Consumer, "example_group", ["example_topic"]]
+      )
+    ]
+    supervisor_opts = [strategy: :one_for_one]
+
+    Supervisor.start_link(children, supervisor_opts)
   end
 end

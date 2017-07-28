@@ -7,7 +7,7 @@ defmodule KafkaExExamples.Consumer do
 
   def handle_message(message = %Message{}, consumer_state) do
     Logger.debug(fn -> "GOT: #{inspect message}" end)
-    {:ack, consumer_state}
+    {:async_commit, consumer_state}
   end
 
   def assign_partitions(members, partitions) do

@@ -20,7 +20,7 @@ mix compile
 First, create a topic and give it 6 partitions:
 
 ```
-kafka-topics.sh --topic example_topic2 --zookeeper localhost:2181 --alter --partitions 6
+kafka-topics.sh --topic example_topic2 --zookeeper localhost:2181 --create --partitions 6 --replication-factor 1
 ```
 
 Then, open three separate terminal windows and set this directory as the working

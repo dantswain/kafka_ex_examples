@@ -5,7 +5,6 @@ defmodule KafkaExExamples do
 
   use Application
 
-  alias KafkaEx.ConsumerGroup
   alias KafkaEx.ConsumerGroup.PartitionAssignment
   alias KafkaExExamples.Consumer
 

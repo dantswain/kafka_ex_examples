@@ -1,1 +1,1 @@
-%{"kafka_ex": {:git, "https://github.com/kafkaex/kafka_ex.git", "ca7ff34c428a08bb5baa5b7b6d65962457948bf4", [branch: "consumer-group"]}}
+%{"kafka_ex": {:hex, :kafka_ex, "0.8.0", "9161968e6d5881375f0c9cac6fa7b73f25c492d2d318b15f15ea2bee897fb13d", [:mix], [], "hexpm"}}

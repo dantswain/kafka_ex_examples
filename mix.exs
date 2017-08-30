@@ -21,11 +21,7 @@ defmodule KafkaExExamples.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {
-        :kafka_ex, 
-        github: "kafkaex/kafka_ex",
-        branch: "consumer-group"
-      }
+      {:kafka_ex, "~> 0.8.0"}
     ]
   end
 end

@@ -41,8 +41,8 @@ do
   # delete the existing listeners line
   sed -i.bak "/^listeners=/d" ${target}
   # add an advertised.listeners and listeners together at the end
-  echo "advertised.listeners=SSL://${DOCKER_IP}:${port}" >> ${target}
-  echo "listeners=SSL://0.0.0.0:${port}" >> ${target}
+  echo "advertised.listeners=PLAINTEXT://${DOCKER_IP}:${port}" >> ${target}
+  echo "listeners=PLAINTEXT://0.0.0.0:${port}" >> ${target}
 done
 
 docker-compose up -d

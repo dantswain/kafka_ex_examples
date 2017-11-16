@@ -49,6 +49,33 @@ defmodule KafkaExExamples do
     end
   end
 
+  defmodule Producer do
+    use GenServer
+
+    @interval_msec 2_000
+    require Logger
+
+    def start_link(topic, num_partitions) do
+      GenServer.start_link(__MODULE__, {topic, num_partitions}, name: __MODULE__)
+    end
+
+    def init({topic, num_partitions}) do
+      :timer.send_interval(@interval_msec, :produce)
+      {:ok, %{topic: topic, num_partitions: num_partitions, count: 0}}
+    end
+
+    def handle_info(:produce, state) do
+      partition = :rand.uniform(state.num_partitions) - 1
+      from_node = Node.self()
+      generation = KafkaEx.ConsumerGroup.generation_id(ExampleConsumerGroup)
+      message = "Hello Partition #{partition}, message #{state.count}, " <>
+        "from #{inspect from_node}, generation #{generation}"
+      Logger.debug(fn -> "Sending '#{message}'" end)
+      KafkaEx.produce(state.topic, partition, message)
+      {:noreply, %{state | count: state.count + 1}}
+    end
+  end
+
   # OTP setup
   use Application
 
@@ -65,6 +92,7 @@ defmodule KafkaExExamples do
     consumer_group_opts = [
       # commit relatively often to make demonstration easy
       commit_interval: 1_000,
+      commit_threshold: 1,
       # same with a relatively quick heartbeat rate
       heartbeat_interval: 1_000,
       # name for process registration
@@ -75,7 +103,7 @@ defmodule KafkaExExamples do
       partition_assignment_callback: &assign_partitions/2,
       # how long before Kafka considers a consumer gone
       # must be >= group.min.session.timeout.ms from broker config
-      session_timeout: 6_000
+      # session_timeout: 6_000
     ]
 
     # standard OTP supervisor setup
@@ -83,7 +111,8 @@ defmodule KafkaExExamples do
       supervisor(
         KafkaEx.ConsumerGroup,
         [Consumer, "example_group", ["example_topic"], consumer_group_opts]
-      )
+      ),
+      worker(Producer, ["example_topic", 6])
     ]
     supervisor_opts = [strategy: :one_for_one]
 
@@ -103,6 +132,7 @@ defmodule KafkaExExamples do
 
     # log out the assignments for demonstration purposes
     Logger.debug(fn ->
+      "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n" <>
       "ASSIGN: #{inspect members} | #{inspect partitions} | #{inspect result}"
     end)
 

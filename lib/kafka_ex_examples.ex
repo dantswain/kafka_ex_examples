@@ -45,6 +45,7 @@ defmodule KafkaExExamples do
       for  message = %Message{} <- messages do
         Logger.debug(fn -> "GOT: #{inspect message}" end)
       end
+      :timer.sleep(300)
       {:async_commit, consumer_state}
     end
   end
@@ -67,6 +68,10 @@ defmodule KafkaExExamples do
     def handle_info(:produce, state) do
       partition = :rand.uniform(state.num_partitions) - 1
       from_node = Node.self()
+      manager = KafkaEx.ConsumerGroup.get_manager_pid(ExampleConsumerGroup)
+      Logger.debug(fn -> 
+        inspect Process.info(manager)
+      end)
       generation = KafkaEx.ConsumerGroup.generation_id(ExampleConsumerGroup)
       message = "Hello Partition #{partition}, message #{state.count}, " <>
         "from #{inspect from_node}, generation #{generation}"

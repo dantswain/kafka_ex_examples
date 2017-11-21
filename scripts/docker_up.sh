@@ -31,6 +31,7 @@ do
   mkdir -p kafka${i}
   target=kafka${i}/server.properties.in
   cp ./server.properties ${target}
+  cp ./log4j.properties kafka${i}/log4j.properties
   # configure broker and port
   sed -i.bak "s/@broker_id@/${i}/g" ${target}
   sed -i.bak "s/@port@/${port}/g" ${target}
@@ -46,3 +47,6 @@ do
 done
 
 docker-compose up -d
+
+docker-compose exec kafka3 /bin/bash -c "KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 KAFKA_PORT=9094 KAFKA_CREATE_TOPICS=example_topic:6:2 create-topics.sh"
+

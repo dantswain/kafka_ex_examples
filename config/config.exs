@@ -11,11 +11,8 @@ config :kafka_ex,
   sync_timeout: 3000,
   max_restarts: 10,
   max_seconds: 60,
-  use_ssl: true,
-  ssl_options: [
-    cacertfile: System.cwd <> "/ssl/ca-cert",
-    certfile: System.cwd <> "/ssl/cert.pem",
-    keyfile: System.cwd <> "/ssl/key.pem",
-  ],
+  use_ssl: false,
+  ssl_options: [ ],
   kafka_version: "0.9.0"
 
+config :logger, level: :debug

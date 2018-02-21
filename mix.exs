@@ -21,7 +21,8 @@ defmodule KafkaExExamples.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:kafka_ex, "~> 0.8.0"}
+      {:kafka_ex, path: "../kafka_ex"}
+      #  {:kafka_ex, "~> 0.8.0"}
     ]
   end
 end

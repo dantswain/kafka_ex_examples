@@ -1,1 +1,1 @@
-%{"kafka_ex": {:hex, :kafka_ex, "0.8.0", "9161968e6d5881375f0c9cac6fa7b73f25c492d2d318b15f15ea2bee897fb13d", [:mix], [], "hexpm"}}
+%{"kafka_ex": {:git, "git@github.com:kafkaex/kafka_ex", "e64a3e6201d936fe815e29b0f1b67aeddc8cf99b", []}}

@@ -33,7 +33,8 @@ In the third terminal, start `KafkaEx` and publish some messages:
 
 ```
 iex> KafkaEx.start(nil, nil)
-iex> Enum.each(0..6, fn(ix) -> KafkaEx.produce("example_topic", ix, "HI #{ix}") end)
+iex> {:ok, pid} = KafkaEx.start_link_worker(:no_name)
+iex> Enum.each(0..6, fn(ix) -> KafkaEx.produce("example_topic", ix, "HI #{ix}", worker_name: pid) end)
 ```
 
 You should see logs in the other two terminals as the messages are consumed:
